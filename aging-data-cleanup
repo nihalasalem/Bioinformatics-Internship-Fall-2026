@@ -1,0 +1,18 @@
+#read the columns-samples file
+columns_samples <- read_csv("/cloud/project/Fall_2026/Datasets/aging_dataset/columns-samples.csv")
+#read the donor information file, located in https://aging.brain-map.org/download/index
+DonorInformation <- read_csv("/cloud/project/Fall_2026/Datasets/aging_dataset/DonorInformation.csv")
+#merge them by the common column to produce a metadata file
+metadata_aging<-merge(columns_samples,DonorInformation,by="donor_id")
+
+#whow to import directly from the source,without computer download
+library(readr)
+
+url <- "https://aging.brain-map.org/api/v2/data/query.csv?criteria=model::ApiTbiDonorDetail,rma::options[num_rows$eqall]"
+
+donors <- read_csv(url)
+#explore the data
+table(metadata_aging$structure_name)
+table(metadata_aging$ever_tbi_w_loc)
+
+View(table(metadata_aging$structure_name,metadata_aging$race,metadata_aging$ever_tbi_w_loc))
