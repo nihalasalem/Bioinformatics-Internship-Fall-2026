@@ -21,8 +21,8 @@
 #I am just copying and pasting the code from last time)
 library(readr)
 #read the dataset
-counts <- read.delim("/cloud/project/Summer_2026/Datasets/Human_AUD_GSE253155/counts.txt")
-GSE253155_series_matrix <- read_csv("/cloud/project/Summer_2026/Datasets/Human_AUD_GSE253155/GSE253155_series_matrix.csv")
+counts <- read.delim("/cloud/project/Fall_2026/Datasets/Human_AUD_GSE253155/counts.txt")
+GSE253155_series_matrix <- read_csv("/cloud/project/Fall_2026/Datasets/Human_AUD_GSE253155/GSE253155_series_matrix.csv")
 # Transpose the metadata
 meta_raw<-GSE253155_series_matrix
 meta_raw_t<-t(meta_raw)
@@ -57,7 +57,7 @@ View(data.frame(
   metadata_samples = rownames(meta_subset),
   count_samples = colnames(counts)
 ))
- #QUESTION:
+#QUESTION:
 # Why is sample matching critical before running DESeq2?
 
 
@@ -126,13 +126,15 @@ res_table<-as.data.frame(res)
 ############################################################
 #what is ensemble id, gene names, gene symbols
 
-BiocManager::install("biomaRt")
+BiocManager::install("biomaRt",force=TRUE)
 library(biomaRt)
 
 # Connect to Ensembl
-mart <- useMart("ensembl",
-                dataset = "hsapiens_gene_ensembl")
-
+mart <- useEnsembl(
+  biomart = "ensembl",
+  dataset = "hsapiens_gene_ensembl",
+  version = 115
+)
 # Remove version numbers from Ensembl IDs, wy?
 rownames(res) <- sub("\\..*", "", rownames(res))
 
